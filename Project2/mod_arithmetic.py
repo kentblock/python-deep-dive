@@ -2,8 +2,7 @@
 
 class Mod:
 
-    def __init__(self, value, modulus):
-        
+    def __init__(self, value, modulus): 
         if not isinstance(modulus, int):
             raise TypeError("modulus must be an integer.")
         if modulus < 1: 
@@ -47,7 +46,13 @@ class Mod:
         pass
 
     def __add__(self, b):
-        pass
+        if isinstance(b, Mod):
+            if same_mod(b):
+                return Mod((self.value + b.value) % self.modulus, self.modulus)
+            return NotImplemented
+        if isinstance(b, int):
+            return Mod((self.value + b) % self.modulus, self.modulus)  
+        return NotImplemented
 
     def __sub__(self, b):
         pass
@@ -67,4 +72,6 @@ class Mod:
     def __imul__(self, b):
         pass
 
+    def same_mod(self, other):
+        return self.modulus == other.modulus
     #TODO implement ordering as well
