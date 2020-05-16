@@ -24,7 +24,7 @@ class Mod:
         """Equal if they have same modulus and value, 
         allow comparison between Mod and residue of an int as well"""
         if isinstance(other, Mod):
-            if other.modulus != self.modulus:
+            if self.same_mod(other):
                 return NotImplemented
             else: 
                 if self.value == other.value:
@@ -43,11 +43,11 @@ class Mod:
         return self.value
 
     def __repr__(self):
-        pass
+        return f"Mod object: value = {self.value}, modulus = {self.modulus}"
 
     def __add__(self, b):
         if isinstance(b, Mod):
-            if same_mod(b):
+            if self.same_mod(b):
                 return Mod((self.value + b.value) % self.modulus, self.modulus)
             return NotImplemented
         if isinstance(b, int):
@@ -55,22 +55,36 @@ class Mod:
         return NotImplemented
 
     def __sub__(self, b):
-        pass
+        if isinstance(b, Mod):
+            if self.same_mod(b):
+                return Mod((self.value - b.value) % self.modulus, self.modulus)
+            return NotImplemented
+        if isinstance(b, int):
+            return Mod((self.value - b) % self.modulus, self.modulus)  
+        return NotImplemented
 
     def __mul__(self, b):
-        pass
+        if isinstance(b, Mod):
+            if self.same_mod(b):
+                return Mod((self.value * b.value) % self.modulus, self.modulus)
+            return NotImplemented
+        if isinstance(b, int):
+            return Mod((self.value * b) % self.modulus, self.modulus)  
+        return NotImplemented
 
     def __pow__(self, p):
-        pass
+        if isinstance(b, int):
+            return Mod((self.value ** p) % self.modulus, self.modulus)  
+        return NotImplemented
 
     def __iadd__(self, b):
-        pass
+        return self + b
 
     def __isub__(self, b):
-        pass
+        return self - b
 
     def __imul__(self, b):
-        pass
+        return self * b
 
     def same_mod(self, other):
         return self.modulus == other.modulus
