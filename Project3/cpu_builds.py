@@ -3,10 +3,10 @@
 class Resource:
 
     def __init__(self, name, manufacturer, total, allocated): 
-        self.name = name
-        self.manufacturer = manufacturer
-        check_pos_int(total)
-        check_pos_int(allocated)
+        self._name = name
+        self._manufacturer = manufacturer
+        self.check_pos_int(total)
+        self.check_pos_int(allocated)
         self._total = total
         self._allocated = allocated
 
@@ -44,10 +44,7 @@ class Resource:
         return f"{self.name}"
 
     def __repr__(self):
-        return f"Resource(name = {self.name}, 
-            manufacturer = {self.manufacturer}, 
-            total = {self.total}, 
-            allocated = {self.allocated})"
+        return f"Resource(name = {self.name}, manufacturer = {self.manufacturer}, total = {self.total}, allocated = {self.allocated})"
     
     def claim(self, n):
         check_pos_int(n)
@@ -62,7 +59,7 @@ class Resource:
             raise ValueError("No available resources to allocate.")
 
     def freeup(self, n):
-        check_pos_int(n)
+        self.check_pos_int(n)
         if n <= self.allocated:
             self._total += n
             self._allocated -= n
@@ -74,14 +71,14 @@ class Resource:
             raise ValueError("No allocated resources to free up.")
 
     def died(self, n):
-        check_pos_int(n)
+        self.check_pos_int(n)
         if n <= self.total:
             self.total -= n
         else:
             raise ValueError(f"Cannot remove {n} of this resource, only {self.total} remaining")
 
     def purchased(self, n):
-        check_pos_int(n)
+        self.check_pos_int(n)
         self._total += n 
     
     @staticmethod
@@ -94,15 +91,15 @@ class Resource:
 
 class CPU(Resource):
 
-    def __init__(self, cores, socket, power_watts, **args):
-        check_pos_int(cores)
-        check_pos_int(power_watts)
+    def __init__(self, cores, socket, power_watts, *args):
+        self.check_pos_int(cores)
+        self.check_pos_int(power_watts)
         if not isinstance(socket, str):
             raise TypeError("socket must be of type string.")
         self._cores = cores
         self._socket = socket
         self._power_watts = power_watts
-        super(**args)
+        super().__init__(*args)
 
     @property
     def cores(self):
@@ -118,10 +115,10 @@ class CPU(Resource):
 
 class Storage(Resource):
 
-    def __init__(self, capacity, **args):
-        check_pos_int(capacity)
+    def __init__(self, capacity, *args):
+        self.check_pos_int(capacity)
         self.capacity_gb = capacity
-        self.super(**args)
+        self.super().__init__(*args)
 
     @property
     def capacity(self):
@@ -130,12 +127,12 @@ class Storage(Resource):
 
 class HDD(Storage):
 
-    def __init__(self, size, rpm, **args):
-        check_pos_int(size)
-        check_pos_int(rpm)
+    def __init__(self, size, rpm, *args):
+        self.check_pos_int(size)
+        self.check_pos_int(rpm)
         self._size = size
         self._rpm = rpm
-        self.super(**args)
+        self.super().__init__(*args)
 
     @property
     def size(self):
@@ -147,11 +144,11 @@ class HDD(Storage):
 
 class SDD(Storage):
 
-    def __init__(self, interface, **args):
+    def __init__(self, interface, *args):
         if not isinstance(interface, str):
             raise TypeError("interface must be of type string")
         self.interface = interface
-        self.super(**args)
+        self.super().__init__(*args)
 
     @property
     def interface(self):
