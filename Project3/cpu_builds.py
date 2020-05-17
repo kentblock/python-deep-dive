@@ -3,8 +3,8 @@
 class Resource:
 
     def __init__(self, name, manufacturer, total, allocated): 
-        self._name = name
-        self._manufacturer = manufacturer
+        self.name = name
+        self.manufacturer = manufacturer
         self.check_pos_int(total)
         self.check_pos_int(allocated)
         self._total = total
@@ -34,11 +34,13 @@ class Resource:
     def name(self, name):
         if not isinstance(name, str):
             raise TypeError("name must be of type string.")
+        self._name = name
 
     @manufacturer.setter
     def manufacturer(self, manufacturer):
         if not isinstance(manufacturer, str):
             raise TypeError("name must be of type string.")
+        self._manufacturer = manufacturer
 
     def __str__(self):
         return f"{self.name}"
@@ -47,7 +49,7 @@ class Resource:
         return f"Resource(name = {self.name}, manufacturer = {self.manufacturer}, total = {self.total}, allocated = {self.allocated})"
     
     def claim(self, n):
-        check_pos_int(n)
+        self.check_pos_int(n)
         if n <= self.total:
             self._total -= n
             self._allocated += n

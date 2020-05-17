@@ -1,4 +1,7 @@
-
+#TODO refactor code and make less repititive
+#write some unit tests
+#.gitignore pyc files and remove from repo
+import operator 
 
 class Mod:
 
@@ -88,4 +91,3 @@ class Mod:
 
     def same_mod(self, other):
         return self.modulus == other.modulus
-    #TODO implement ordering as well
